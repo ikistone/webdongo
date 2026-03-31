@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacar App - Bucin Forever ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* VIDEO BACKGROUND */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            filter: brightness(0.6) contrast(1.1);
+        }
+
+        /* Overlay Gradient */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(233, 30, 99, 0.7) 0%,
+                rgba(255, 107, 157, 0.5) 50%,
+                rgba(103, 58, 183, 0.6) 100%);
+            z-index: -1;
+        }
+
+        /* LOGIN SECTION */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 60px 50px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            animation: floatIn 1.5s ease-out;
+        }
+
+        @keyframes floatIn {
+            0% { 
+                opacity: 0; 
+                transform: translateY(50px) scale(0.9); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        .login-title {
+            font-size: 38px;
+            background: linear-gradient(45deg, #ff6b9d, #feca57, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+        }
+
+        .login-subtitle {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 20px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            outline: none;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-group input:focus {
+            border-color: #ff6b9d;
+            box-shadow: 0 0 25px rgba(255, 107, 157, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* GLOWING BUTTON */
+        .glow-btn {
+            position: relative;
+            width: 100%;
+            padding: 20px 40px;
+            background: linear-gradient(45deg, #ff6b9d, #feca57, #ff9ff3);
+            background-size: 300% 300%;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 10px 30px rgba(255, 107, 157, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            animation: glowPulse 2s infinite;
+            overflow: hidden;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 10px 30px rgba(255, 107, 157, 0.4),
+                    0 0 50px rgba(255, 107, 157, 0.3);
+            }
+            50% { 
+                box-shadow: 
+                    0 15px 40px rgba(255, 107, 157, 0.6),
+                    0 0 80px rgba(255, 107, 157, 0.5);
+            }
+        }
+
+        .glow-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 20px 50px rgba(255, 107, 157, 0.7),
+                0 0 100px rgba(255, 107, 157, 0.6);
+            animation: none;
+        }
+
+        .glow-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .glow-btn:hover::before {
+            left: 100%;
+        }
+
+        .hint {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 15px;
+        }
+
+        /* APP SECTION */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px 30px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .nav-glow {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            transition: left 0.6s;
+        }
+
+        .nav-glow:hover::before {
+            left: 100%;
+        }
+
+        .nav-glow:hover {
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            border-color: #ff6b9d;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.5);
+        }
+
+        /* CONTENT */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 60px 50px;
+            margin-bottom: 50px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            animation: slideInUp 1s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 36px;
+            background: linear-gradient(45deg, #ff6b9d, #feca57, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: bold;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+        }
+
+        /* BERANDA */
+        .hero-text {
+            font-size: 22px;
+            text-align: center;
+            line-height: 1.8;
+            margin-bottom: 50px;
+            opacity: 0.95;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 107, 157, 0.2);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-animation: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        /* PERJALANAN */
+        .trips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px; 
+        }
+
+        .trip-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trip-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255,107,157,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .trip-item:hover::before {
+            opacity: 1;
+        }
+
+        .trip-item:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 107, 157, 0.2);
+        }
+
+        .trip-icon {
+            font-size: 48px;
+            margin-right: 25px;
+            opacity: 0.9;
+        }
+
+        .trip-content h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+
+        /* FOTO */
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .photo-card {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 25px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .photo-card::after {
+            content: '💕';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .photo-card:hover::after {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.1);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .login-card { padding: 40px 30px; }
+            .navbar { flex-direction: column; gap: 15px; }
+            .section { padding: 40px 25px; }
+            .trips-grid, .photos-grid { grid-template-columns: 1fr; }
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.9;
+            font-size: 16px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- VIDEO BACKGROUND BUCIN -->
+    <video class="video-bg" autoplay muted loop playsinline>
+        <!-- GANTI DENGAN VIDEO BUCIN KALIAN -->
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-woman-in-a-pool-3985-large.mp4" type="video/mp4">
+        <!-- Atau upload video kalian ke hosting dan ganti src di atas -->
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- OVERLAY -->
+    <div class="overlay"></div>
+
+    <!-- LOGIN -->
+    <div class="login-container">
+        <form class="login-card" action="#app">
+            <h1 class="login-title">alkistone💕</h1>
+            <p class="login-subtitle">Masuk ke dunia cinta kita berdua</p>
+            
+            <div class="input-group">
+                <input type="text" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" placeholder="sayang ga" required>
+            </div>
+            
+            <button type="submit" class="glow-btn">✨ Masuk ke Cinta ✨</button>
+        </form>
+    </div>
+
+    <!-- APP CONTENT -->
+    <div class="app-container" id="app">
+        <div class="content">
+            <!-- NAVBAR -->
+            <nav class="navbar">
+                <a href="#home" class="nav-glow">🏠 Beranda</a>
+                <a href="#trips" class="nav-glow">✈️ Perjalanan</a>
+                <a href="#photos" class="nav-glow">📸 Foto</a>
+            </nav>
+            <!-- BERANDA -->
+            <section class="section" id="home">
+                <h2 class="section-title">Selamat Datang di alkistone!</h2>
+                <p class="hero-text">Di sini kita bisa menyimpan semua kenangan indah kita, merencanakan petualangan seru, dan tentunya, semakin bucin setiap harinya! ❤️</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="daysTogether">0</span>
+                        Hari Bersama sejak 14 Februari 2024
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">10+</span>
+                        Petualangan
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">1000+</span>
+                        Foto Romantis
+                    </div>
+                </div>
+            </section>  
+            <!-- PERJALANAN -->
+            <section class="section" id="trips">
+                <h2 class="section-title">Perjalanan Kita</h2>
+                <div class="trips-grid
+">
+                    <div class="trip-item">
+                        <div class="trip-icon">🏖️</div>
+                        <div class="trip-content">
+                            <h3>Liburan ke jakarta</h3>
+                            31 desember 2025 - 1 januari 2026
+                        </div>
+                    </div>
+                    <div class="trip-item">
+                        <div class="trip-icon">🏞️</div>
+                        <div class="trip-content">
+                            <h3>seblak date</h3>
+                            28 maret 2026
+                        </div>
+                    </div>
+                    <div class="trip-item">
+                        <div class="trip-icon">🌆</div>
+                        <div class="trip-content">
+                            <h3>muter muter naik motor</h3>
+                            tiap hari minggu, mulai 14 februari 2024 sampai seterusnya
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOTO -->
+            <section class="section" id="photos">
+                <h2 class="section-title">Foto Bersama</h2>
+                <div class="photos-grid">
+                    <div class="photo-card
+">
+                        <img src="img/IMG-20250927-WA0119(1).jpg" alt="Foto Romantis 1">
+                    </div>
+                    <div class="photo-card
+">
+                        <img src="img/IMG-20250927-WA0112(2).jpg" alt="Foto Romantis 2">
+                    </div>
+                    <div class="photo-card
+">
+                        <img src="img/IMG-20250927-WA0108(2).jpg" alt="Foto Romantis 3">
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer class="footer">
+            Dibuat dengan ❤️ untuk pacarku tercinta | &copy; 2026 <i>alkistone</i>
+        </footer>
+    </div>
+    <script>
+        document.querySelector('.login-card').addEventListener('submit', function(e){
+            e.preventDefault();
+            const username = this.querySelector('input[type="text"]').value.trim();
+            const password = this.querySelector('input[type="password"]').value;
+            if(username === 'alya' && password === 'sayang'){
+                alert('Login berhasil! Selamat datang di Bucin App ❤️');
+                document.querySelector('.login-container').style.display = 'none';
+                document.querySelector('.app-container').style.display = 'block';
+            } else {
+                alert('tanya ke rizqi!');
+            }
+        });
+
+        function updateDaysTogether() {
+            const startDate = new Date(2024, 1, 14); // 14 Feb 2024 (month index 1)
+            const today = new Date();
+            const diff = today - startDate;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const days = Math.floor(diff / oneDay);
+            const el = document.getElementById('daysTogether');
+            if (el) {
+                el.textContent = days.toLocaleString('id-ID');
+            }
+        }
+
+        updateDaysTogether();
+        setInterval(updateDaysTogether, 1000 * 60); // refresh tiap menit
+
+    </script>
+</body>
+</html>
